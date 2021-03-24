@@ -232,8 +232,12 @@ const updateController = (req, res, next) => {
 };
 
 // DELETE /quizzes/:id
-const destroyController = (req, res, next) => {
-    // .... introducir código
+const destroyController = async (req, res, next) => {
+    let id = req.params.id;
+    let n = await Quiz.destroy({where: {id}});
+    if (n===0) throw new Error(`  ${id} not in DB`);
+    console.log(`  ${id} deleted from DB`);
+    res.redirect(`/quizzes`);
 };
 
 
@@ -248,8 +252,11 @@ app.post('/quizzes', createController);
 
 // ..... crear rutas e instalar los MWs para:
 //   GET  /quizzes/:id/edit
+app.get('/quizzes/:id/edit', editController);
 //   PUT  /quizzes/:id
+app.put('quizzes/:id', updateController);
 //   DELETE  /quizzes/:id
+app.delete('/quizzes/:id', destroyController);
 
 
 app.all('*', (req, res) =>
