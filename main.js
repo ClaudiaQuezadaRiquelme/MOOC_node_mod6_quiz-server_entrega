@@ -161,7 +161,7 @@ const editView = (quiz) => {
   </head>
   <body>
     <h1>Edit Quiz</h1>
-    <form method="GET" action="/quizzes?_method=PUT">
+    <form action="/quizzes/${quiz.id}?_method=PUT" method="POST">
       <label for="question">Question: </label>
       <input type="text" name="question" value="${quiz.question}" placeholder="Question"> 
       <br>
@@ -250,8 +250,20 @@ const editController = async (req, res, next) => {
 };
 
 //  PUT /quizzes/:id
-const updateController = (req, res, next) => {
-    // .... introducir código
+const updateController = async (req, res, next) => {
+    const {question, answer} = req.body;
+    let id = req.params.id;
+    if (Number.isNaN(id)) return next(new Error(`"${req.params.id}" should be number.`));
+    let quiz = await Quiz.findByPk(Number(id));
+    quiz.question = question;
+    quiz.answer = answer;
+
+    try {
+        await quiz.save({fields: ["question", "answer"] });
+        res.redirect(`/quizzes`);
+    } catch (err) {
+        next(err)
+    }    
 };
 
 // DELETE /quizzes/:id
@@ -272,12 +284,11 @@ app.get('/quizzes/:id/check', checkController);
 app.get('/quizzes/new', newController);
 app.post('/quizzes', createController);
 
-
 // ..... crear rutas e instalar los MWs para:
 //   GET  /quizzes/:id/edit
 app.get('/quizzes/:id/edit', editController);
 //   PUT  /quizzes/:id
-app.put('quizzes/:id', updateController);
+app.put('/quizzes/:id', updateController);
 //   DELETE  /quizzes/:id
 app.delete('/quizzes/:id', destroyController);
 
