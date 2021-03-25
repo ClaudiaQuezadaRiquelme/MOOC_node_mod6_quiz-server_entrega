@@ -64,17 +64,21 @@ const indexView = quizzes =>
         ${style}
     </head>
     <body>
-        <h1>Quizzes</h1>` +
+        <h1>Quizzes</h1>
+        <table>` +
     quizzes.map(quiz =>
-        `<div>
-                <a href="/quizzes/${quiz.id}/play">${quiz.question}</a>
-                <a href="/quizzes/${quiz.id}/edit"
-                   class="button">Edit</a>
-                <a href="/quizzes/${quiz.id}?_method=DELETE"
-                   onClick="return confirm('Delete: ${quiz.question}')"
-                   class="button">Delete</a>
-             </div>`).join("\n") +
-    `<a href="/quizzes/new" class="button">New Quiz</a>
+        ` 
+                <tr>
+                    <td><a href="/quizzes/${quiz.id}/play">${quiz.question}</a></td>
+                    <td><a href="/quizzes/${quiz.id}/edit"
+                    class="button">Edit</a></td>
+                    <td><a href="/quizzes/${quiz.id}?_method=DELETE"
+                    onClick="return confirm('Delete: ${quiz.question}')"
+                    class="button">Delete</a></td>
+                </tr>                  
+             `).join("") +
+    `</table>
+    <a href="/quizzes/new" class="button">New Quiz</a>
     </body>
     </html>`;
 
