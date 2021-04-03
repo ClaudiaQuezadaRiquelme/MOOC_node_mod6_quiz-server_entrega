@@ -2,7 +2,22 @@ const Browser = require('zombie');
 const dbLength = require('../main');
 
 describe('Un test que compruebe la funcionalidad de una vista mostrada al usuario', () => {
+    const browser = new Browser();
 
+    describe('Quizzes in *indexView(quizzes)* must be aligned in a table', () => {
+        before( () => browser.visit('http://localhost:8000/quizzes') );
+
+        it('A table must exist', () => {
+            browser.assert.element('table');
+        });
+        it('The table must have columns and rows', () => {
+            browser.assert.elements('table tbody tr td', { atLeast: 1 });
+        });
+        it('The table must have links and buttons', () => {
+            browser.assert.elements('table tbody tr td a', { atLeast: 1 });
+            browser.assert.elements('table tbody tr td a.button', { atLeast: 1 });
+        });
+    });
 });
 
 describe('Un test que compruebe el funcionamiento de un formulario', () => {
