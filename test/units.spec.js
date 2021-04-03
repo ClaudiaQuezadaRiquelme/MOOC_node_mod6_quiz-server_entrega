@@ -1,10 +1,34 @@
 const Browser = require('zombie');
+const dbLength = require('../main');
 
 describe('Un test que compruebe la funcionalidad de una vista mostrada al usuario', () => {
 
 });
 
 describe('Un test que compruebe el funcionamiento de un formulario', () => {
+    const browser = new Browser();
+
+    before( () => browser.visit('http://localhost:8000/quizzes/new') );
+    
+    describe('Creating a new quiz', () => {
+        before( () => {
+            browser.fill('question', 'Capital of Peru');
+            browser.fill('answer', 'Lima');
+            return browser.pressButton('Create');
+        });
+
+        it('New quiz form was filled', () => {
+            browser.assert.success();
+        });
+        it('New quiz should exist', () => { // Comprueba si existe la ruta del nuevo quiz dentro de la página quizzes
+            browser.assert.attribute(`#quiz-name-${dbLength + 1}`, 'href', `/quizzes/${dbLength + 1}/play`);
+        });
+        
+    });
+
+    describe('Sending an empty quiz', () => {
+
+    });
 
 });
 

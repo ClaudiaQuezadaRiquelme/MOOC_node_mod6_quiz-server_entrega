@@ -23,6 +23,8 @@ const Quiz = sequelize.define( // define Quiz model (table quizzes)
     }
 );
 
+let dbLength = 0; // Use for testing only
+
 (async () => {  // IIFE - Immediatedly Invoked Function Expresión
     try {
         await sequelize.sync(); // Syncronize DB and seed if needed
@@ -35,8 +37,10 @@ const Quiz = sequelize.define( // define Quiz model (table quizzes)
                 {question: "Capital of Portugal", answer: "Lisbon"}
             ]);
             console.log(`DB filled with ${c.length} quizzes.`);
+            dbLength = c.length;
         } else {
             console.log(`DB exists & has ${count} quizzes.`);
+            dbLength = count;
         }
     } catch (err) {
         console.log(err);
@@ -69,7 +73,7 @@ const indexView = quizzes =>
     quizzes.map(quiz =>
         ` 
                 <tr>
-                    <td><a href="/quizzes/${quiz.id}/play">${quiz.question}</a></td>
+                    <td><a id="quiz-name-${quiz.id}" href="/quizzes/${quiz.id}/play">${quiz.question}</a></td>
                     <td><a href="/quizzes/${quiz.id}/edit"
                     class="button">Edit</a></td>
                     <td><a href="/quizzes/${quiz.id}?_method=DELETE"
@@ -309,4 +313,8 @@ app.use((error, req, res, next) => {
 });
 
 // Server started at port 8000
-app.listen(8000);
+if(!module.parent){ // Use for testing only
+    app.listen(8000);
+}
+
+module.exports = dbLength; // Use for testing only
