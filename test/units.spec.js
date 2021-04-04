@@ -1,6 +1,9 @@
 const Browser = require('zombie');
 let chai = require('chai');
-const dbLength = require('../main');
+let chaiHttp = require('chai-http');
+
+const { dbLength, app } = require('../main');
+const expect = chai.expect;
 
 describe('Test que compruebe la funcionalidad de una vista mostrada al usuario', () => {
     const browser = new Browser();
@@ -36,8 +39,10 @@ describe('Test que compruebe el funcionamiento de un formulario', () => {
         it('New quiz form was filled', () => {
             browser.assert.success();
         });
-        it('New quiz should exist', () => { // Comprueba si existe la ruta del nuevo quiz dentro de la página quizzes
-            browser.assert.attribute(`#quiz-name-${dbLength + 1}`, 'href', `/quizzes/${dbLength + 1}/play`);
+        it('New quiz should exist', async() => { // Comprueba si existe la ruta del nuevo quiz dentro de la página quizzes
+            const count = await dbLength();
+            // console.log('dbLength ', count);
+            browser.assert.attribute(`#quiz-name-${count}`, 'href', `/quizzes/${count}/play`);
         });
         
     });
@@ -98,7 +103,22 @@ describe('Test que compruebe el funcionamiento de una ruta', () => {
 });
 
 describe('Test que compruebe el funcionamiento de un controlador', () => {
+    chai.use(chaiHttp);
 
+    describe('DELETE /quizzes/:id', () => {
+        it('should delete quiz added in testing (´Capital of Peru´)', (done) => {
+            dbLength().then( (count) => {
+                // console.log('dbLength() ', count);
+                chai.request(app)
+                    .delete(`/quizzes/${count}`)
+                    .end( (err, res) => {
+                        expect(res).to.have.status(200);
+                    done();
+                });
+            })
+            
+        });
+    });
 });
 
 describe('Test que compruebe el funcionamiento de un acceso a la BD', () => {

@@ -23,8 +23,6 @@ const Quiz = sequelize.define( // define Quiz model (table quizzes)
     }
 );
 
-let dbLength = 0; // Use for testing only
-
 (async () => {  // IIFE - Immediatedly Invoked Function Expresión
     try {
         await sequelize.sync(); // Syncronize DB and seed if needed
@@ -37,10 +35,8 @@ let dbLength = 0; // Use for testing only
                 {question: "Capital of Portugal", answer: "Lisbon"}
             ]);
             console.log(`DB filled with ${c.length} quizzes.`);
-            dbLength = c.length;
         } else {
             console.log(`DB exists & has ${count} quizzes.`);
-            dbLength = count;
         }
     } catch (err) {
         console.log(err);
@@ -317,9 +313,14 @@ if(!module.parent){ // Use for testing only: avoid Mocha error
     app.listen(8000);
 }
 
+// Use for testing only.
+// dbLength return the amount of data stored in DB
+const dbLength = async() => { return await Quiz.count() }; 
+
 // Use for testing only
-module.exports = dbLength; 
 module.exports = {
+    dbLength,
+    app,
     indexController,
     playController,
     checkController,
@@ -329,4 +330,4 @@ module.exports = {
     editController,
     updateController,
     destroyController
-}
+};

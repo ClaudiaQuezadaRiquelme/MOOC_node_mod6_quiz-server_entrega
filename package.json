@@ -24,6 +24,7 @@
     },
     "devDependencies": {
         "chai": "*",
+        "chai-http": "^4.3.0",
         "mocha": "*",
         "zombie": "^6.1.4"
     }
