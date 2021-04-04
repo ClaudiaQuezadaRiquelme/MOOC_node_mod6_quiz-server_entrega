@@ -54,11 +54,42 @@ describe('Test que compruebe el funcionamiento de un formulario', () => {
             // console.log('dbLength ', count);
             browser.assert.attribute(`#quiz-name-${count}`, 'href', `/quizzes/${count}/play`);
         });
+
+        after( () => browser.visit('http://localhost:8000/quizzes/new') );
         
     });
 
     describe('Sending an empty quiz', () => {
+        before( () => {
+            return browser.pressButton('Create');
+        });
+        it('Should change the route from /quizzes/new to /quizzes/new-alert', () => {
+            browser.assert.url({pathname: '/quizzes/new-alert'});
+        });
+        it('Should exist an alert message', () => {
+            browser.assert.element('#errAlert');
+        });
+        it('The alert message should request to complete the form', () => {
+            browser.assert.text('#errAlert', 'Please, fill the gaps before send.');
+        });
 
+        after( () => browser.visit('http://localhost:8000/quizzes/new') );
+    });
+
+    describe('Sending an incomplete quiz', () => {
+        before( () => {
+            browser.fill('question', 'xxxxx');
+            return browser.pressButton('Create');
+        });
+        it('Should change the route from /quizzes/new to /quizzes/new-alert', () => {
+            browser.assert.url({pathname: '/quizzes/new-alert'});
+        });
+        it('Should exist an alert message', () => {
+            browser.assert.element('#errAlert');
+        });
+        it('The alert message should request to complete the form', () => {
+            browser.assert.text('#errAlert', 'Please, fill the gaps before send.');
+        });
     });
 
 });
