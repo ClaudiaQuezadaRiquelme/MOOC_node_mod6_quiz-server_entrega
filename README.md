@@ -193,3 +193,30 @@ Para evaluar la práctica debe comprobarse que los tests definidos para cada uno
 * Compruebe que al “romper” las funcionalidades probadas los tests dejan de pasar correctamente.
 
 La puntuación de cada uno de los apartados propuestos es de un 20 %, sumando entre todas un total del 100 %.
+
+<br/><br/><br/>
+<hr/>
+<br/><br/><br/>
+
+# Instrucciones del desarrollador
+
+## Para ejecutar test propios
+
+Los test propios para la práctica del módulo 7 se encuentran guardados en el directorio /test en el archivo units.spect.js. Se debe inicializar el servidor manualmente antes de ejecutar los test.
+
+1. En un primer terminal, instalar las dependencias del proyecto si corresponde e inicializar el servidor.
+
+```
+$ npm install                 ## Instalar dependencias del proyecto
+$ node main                   ## Inicializar el servidor
+```
+
+2. En un segundo terminal, ejecutar las baterías de test con la siguiente instrucción:
+
+```
+$ mocha --reporter spec       ## Ejecutar los test
+............................   
+... (resultado de los tests)
+```
+
+Si se desea ejecutar el test varias veces, se debe eliminar el archivo db.sqlite y volver a ejecutar las instrucciones 1 y 2 (saltando la ejecución de "npm install"). Esto debido a que en esta primera iteración no se dispone de una base de datos alternativa para testeo.
