@@ -52,6 +52,7 @@ const style = `
                 background: #4479BA; color: #FFF;
                 border-radius: 4px; border: solid 1px #20538D; }
             .button:hover { background: #356094; }
+            #errAlert { color: red; }
         </style>`;
 
 // View to display all the quizzes in quizzes array
@@ -153,9 +154,34 @@ const newView = quiz => {
   </html>`;
 }
 
+// View to show the form to create a new quiz with an alert after the user send an empty or incomplete form
+const newViewAlert = (quiz, errAlert) => {
+    return `<!doctype html>
+  <html>
+  <head>
+    <meta charset="utf-8">
+    <title>Quiz</title>
+    ${style}
+  </head>
+  <body>
+    <h1>Create New Quiz</h1>
+    <p id="errAlert">${errAlert}</p>
+    <form method="POST" action="/quizzes">
+      <label for="question">Question: </label>
+      <input type="text" name="question" value="${quiz.question}" placeholder="Question"> 
+      <br>
+      <label for="answer">Answer: </label>
+      <input type="text" name="answer" value="${quiz.answer}" placeholder="Answer">
+      <input type="submit" class="button" value="Create">
+    </form>
+    <br>
+    <a href="/quizzes" class="button">Go back</a>
+  </body>
+  </html>`;
+}
 
 // View to show a form to edit a given quiz.
-const editView = (quiz, errAlert) => {
+const editView = quiz => {
     return `<!doctype html>
   <html>
   <head>
@@ -165,7 +191,6 @@ const editView = (quiz, errAlert) => {
   </head>
   <body>
     <h1>Edit Quiz</h1>
-    <p>errAlert</p>
     <form action="/quizzes/${quiz.id}?_method=PUT" method="POST">
       <label for="question">Question: </label>
       <input type="text" name="question" value="${quiz.question}" placeholder="Question"> 
@@ -234,12 +259,18 @@ const newController = async (req, res, next) => {
     res.send(newView(quiz));
 };
 
+// GET /quizzes/new-alert
+const newControllerAlert = async (req, res, next) => {
+    const errAlert = 'Please, fill the gaps before send.';
+    const quiz = {question: "", answer: ""};
+    res.send(newViewAlert(quiz, errAlert));
+};
+
 // POST /quizzes
 const createController = async (req, res, next) => {
     const {question, answer} = req.body;
     if (question === '' || answer === '') {
-        // alert('Please, fill the gaps before send.');
-        res.redirect(`/quizzes/new`);
+        res.redirect(`/quizzes/new-alert`);
     } else {
         try {
             await Quiz.create({question, answer});
@@ -248,7 +279,6 @@ const createController = async (req, res, next) => {
             next(err)
         }
     }
-    
 };
 
 //  GET /quizzes/:id/edit
@@ -292,6 +322,7 @@ app.get(['/', '/quizzes'], indexController);
 app.get('/quizzes/:id/play', playController);
 app.get('/quizzes/:id/check', checkController);
 app.get('/quizzes/new', newController);
+app.get('/quizzes/new-alert', newControllerAlert);
 app.post('/quizzes', createController);
 
 // ..... crear rutas e instalar los MWs para:
@@ -327,14 +358,5 @@ const dbLength = async() => { return await Quiz.count() };
 module.exports = {
     dbLength,
     Quiz,
-    app,
-    indexController,
-    playController,
-    checkController,
-    checkController,
-    newController,
-    createController,
-    editController,
-    updateController,
-    destroyController
+    app
 };
