@@ -1,7 +1,8 @@
 const Browser = require('zombie');
+let chai = require('chai');
 const dbLength = require('../main');
 
-describe('Un test que compruebe la funcionalidad de una vista mostrada al usuario', () => {
+describe('Test que compruebe la funcionalidad de una vista mostrada al usuario', () => {
     const browser = new Browser();
 
     describe('Quizzes in *indexView(quizzes)* must be aligned in a table', () => {
@@ -20,7 +21,7 @@ describe('Un test que compruebe la funcionalidad de una vista mostrada al usuari
     });
 });
 
-describe('Un test que compruebe el funcionamiento de un formulario', () => {
+describe('Test que compruebe el funcionamiento de un formulario', () => {
     const browser = new Browser();
 
     before( () => browser.visit('http://localhost:8000/quizzes/new') );
@@ -96,10 +97,10 @@ describe('Test que compruebe el funcionamiento de una ruta', () => {
 
 });
 
-describe('Un test que compruebe el funcionamiento de un controlador', () => {
+describe('Test que compruebe el funcionamiento de un controlador', () => {
 
 });
 
-describe('Un test que compruebe el funcionamiento de un acceso a la BD', () => {
+describe('Test que compruebe el funcionamiento de un acceso a la BD', () => {
 
 });

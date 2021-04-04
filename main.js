@@ -313,8 +313,20 @@ app.use((error, req, res, next) => {
 });
 
 // Server started at port 8000
-if(!module.parent){ // Use for testing only
+if(!module.parent){ // Use for testing only: avoid Mocha error
     app.listen(8000);
 }
 
-module.exports = dbLength; // Use for testing only
+// Use for testing only
+module.exports = dbLength; 
+module.exports = {
+    indexController,
+    playController,
+    checkController,
+    checkController,
+    newController,
+    createController,
+    editController,
+    updateController,
+    destroyController
+}

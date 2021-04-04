@@ -155,6 +155,8 @@ Dado que es un curso para principiantes, ante la duda les pedimos que sean benev
 * **50%:** La funcionalidad de editar un quiz funciona correctamente
 * **50%:** La funcionalidad de borrar un quiz funciona correctamente
 
+<br/><br/><br/>
+
 <img  align="left" width="150" style="float: left;" src="https://www.upm.es/sfs/Rectorado/Gabinete%20del%20Rector/Logos/UPM/CEI/LOGOTIPO%20leyenda%20color%20JPG%20p.png">
 <img  align="right" width="150" style="float: right;" src="https://miriadax.net/miriadax-theme/images/custom/logo_miriadax_new.svg">
 
