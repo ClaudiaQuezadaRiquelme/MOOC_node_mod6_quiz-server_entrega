@@ -1,8 +1,18 @@
+process.env.NODE_ENV = 'test';
+
+// Good example about testing a server:
+// https://www.digitalocean.com/community/tutorials/test-a-node-restful-api-with-mocha-and-chai
+// Testing documentation:
+// https://zombie.js.org/
+// https://github.com/chaijs/chai-http
+// https://www.chaijs.com/api/bdd/
+
+
 const Browser = require('zombie');
 let chai = require('chai');
 let chaiHttp = require('chai-http');
 
-const { dbLength, app } = require('../main');
+const { dbLength, app, Quiz } = require('../main');
 const expect = chai.expect;
 
 describe('Test que compruebe la funcionalidad de una vista mostrada al usuario', () => {
@@ -122,5 +132,20 @@ describe('Test que compruebe el funcionamiento de un controlador', () => {
 });
 
 describe('Test que compruebe el funcionamiento de un acceso a la BD', () => {
-
+    describe('Access to DB Quiz', () => {
+        it('should access to all data', async() => {
+            const quizzes = await Quiz.findAll();
+            expect(quizzes).to.be.an('array');
+            expect(quizzes).to.be.an('array').that.not.is.empty;
+            quizzes.map(quiz => {
+                expect(quiz.dataValues).to.be.an('object').to.have.any.keys('question', 'answer');
+            });
+        });
+        it('should access to a specific id', async() => {
+            const quiz = await Quiz.findByPk(1);
+            // console.log('quiz, ', quiz);
+            expect(quiz.dataValues).to.be.an('object').to.have.any.keys('question', 'answer');
+            expect(quiz.dataValues.id).to.equal(1);
+        });
+    });
 });

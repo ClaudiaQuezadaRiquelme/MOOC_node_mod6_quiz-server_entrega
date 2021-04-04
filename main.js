@@ -320,6 +320,7 @@ const dbLength = async() => { return await Quiz.count() };
 // Use for testing only
 module.exports = {
     dbLength,
+    Quiz,
     app,
     indexController,
     playController,
