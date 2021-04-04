@@ -155,7 +155,7 @@ const newView = quiz => {
 
 
 // View to show a form to edit a given quiz.
-const editView = (quiz) => {
+const editView = (quiz, errAlert) => {
     return `<!doctype html>
   <html>
   <head>
@@ -165,6 +165,7 @@ const editView = (quiz) => {
   </head>
   <body>
     <h1>Edit Quiz</h1>
+    <p>errAlert</p>
     <form action="/quizzes/${quiz.id}?_method=PUT" method="POST">
       <label for="question">Question: </label>
       <input type="text" name="question" value="${quiz.question}" placeholder="Question"> 
@@ -236,13 +237,18 @@ const newController = async (req, res, next) => {
 // POST /quizzes
 const createController = async (req, res, next) => {
     const {question, answer} = req.body;
-
-    try {
-        await Quiz.create({question, answer});
-        res.redirect(`/quizzes`);
-    } catch (err) {
-        next(err)
+    if (question === '' || answer === '') {
+        // alert('Please, fill the gaps before send.');
+        res.redirect(`/quizzes/new`);
+    } else {
+        try {
+            await Quiz.create({question, answer});
+            res.redirect(`/quizzes`);
+        } catch (err) {
+            next(err)
+        }
     }
+    
 };
 
 //  GET /quizzes/:id/edit
